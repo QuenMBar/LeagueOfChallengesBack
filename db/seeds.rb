@@ -9,5 +9,10 @@
 CreatedChallenge.destroy_all
 Summoner.destroy_all
 Challenge.destroy_all
+Item.destroy_all
+Champion.destroy_all
+SummonerSpell.destroy_all
 
-Challenge.create(name: "Don't Flash", text: "Don't use your flash all game!", challenge_type: 'overall')
+all_challenges = [["Don't use <summoner_spell>", "Don't use your <summoner_spell> all game!", 'summoner_spell'], []]
+
+all_challenges.each { |c| Challenge.create(name: c[0], text: c[1], challenge_type: c[2]) }
