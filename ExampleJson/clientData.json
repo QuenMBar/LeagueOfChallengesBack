@@ -1,0 +1,221 @@
+{
+    "activePlayer": {
+        "abilities": {
+            "E": {
+                "abilityLevel": 0,
+                "displayName": "Cocoon / Rappel",
+                "id": "EliseHumanE",
+                "rawDescription": "GeneratedTip_Spell_EliseHumanE_Description",
+                "rawDisplayName": "GeneratedTip_Spell_EliseHumanE_DisplayName"
+            },
+            "Passive": {
+                "displayName": "Spider Queen",
+                "id": "ElisePassive",
+                "rawDescription": "GeneratedTip_Passive_ElisePassive_Description",
+                "rawDisplayName": "GeneratedTip_Passive_ElisePassive_DisplayName"
+            },
+            "Q": {
+                "abilityLevel": 0,
+                "displayName": "Neurotoxin / Venomous Bite",
+                "id": "EliseHumanQ",
+                "rawDescription": "GeneratedTip_Spell_EliseHumanQ_Description",
+                "rawDisplayName": "GeneratedTip_Spell_EliseHumanQ_DisplayName"
+            },
+            "R": {
+                "abilityLevel": 1,
+                "displayName": "Spider Form",
+                "id": "EliseR",
+                "rawDescription": "GeneratedTip_Spell_EliseR_Description",
+                "rawDisplayName": "GeneratedTip_Spell_EliseR_DisplayName"
+            },
+            "W": {
+                "abilityLevel": 0,
+                "displayName": "Volatile Spiderling / Skittering Frenzy",
+                "id": "EliseHumanW",
+                "rawDescription": "GeneratedTip_Spell_EliseHumanW_Description",
+                "rawDisplayName": "GeneratedTip_Spell_EliseHumanW_DisplayName"
+            }
+        },
+        "championStats": {
+            "abilityHaste": 0.0,
+            "abilityPower": 9.0,
+            "armor": 33.0,
+            "armorPenetrationFlat": 0.0,
+            "armorPenetrationPercent": 1.0,
+            "attackDamage": 55.0,
+            "attackRange": 550.0,
+            "attackSpeed": 0.6875,
+            "bonusArmorPenetrationPercent": 1.0,
+            "bonusMagicPenetrationPercent": 1.0,
+            "cooldownReduction": 0.0,
+            "critChance": 0.0,
+            "critDamage": 175.0,
+            "currentHealth": 534.0,
+            "healthRegenRate": 1.100000023841858,
+            "lifeSteal": 0.0,
+            "magicLethality": 0.0,
+            "magicPenetrationFlat": 0.0,
+            "magicPenetrationPercent": 1.0,
+            "magicResist": 30.0,
+            "maxHealth": 534.0,
+            "moveSpeed": 330.0,
+            "physicalLethality": 0.0,
+            "resourceMax": 324.0,
+            "resourceRegenRate": 1.2000000476837159,
+            "resourceType": "MANA",
+            "resourceValue": 324.0,
+            "spellVamp": 0.0,
+            "tenacity": 0.0
+        },
+        "currentGold": 500.0,
+        "fullRunes": {
+            "generalRunes": [
+                {
+                    "displayName": "Hail of Blades",
+                    "id": 9923,
+                    "rawDescription": "perk_tooltip_HailOfBlades",
+                    "rawDisplayName": "perk_displayname_HailOfBlades"
+                },
+                {
+                    "displayName": "Taste of Blood",
+                    "id": 8139,
+                    "rawDescription": "perk_tooltip_TasteOfBlood",
+                    "rawDisplayName": "perk_displayname_TasteOfBlood"
+                },
+                {
+                    "displayName": "Eyeball Collection",
+                    "id": 8138,
+                    "rawDescription": "perk_tooltip_EyeballCollection",
+                    "rawDisplayName": "perk_displayname_EyeballCollection"
+                },
+                {
+                    "displayName": "Ravenous Hunter",
+                    "id": 8135,
+                    "rawDescription": "perk_tooltip_RavenousHunter",
+                    "rawDisplayName": "perk_displayname_RavenousHunter"
+                },
+                {
+                    "displayName": "Biscuit Delivery",
+                    "id": 8345,
+                    "rawDescription": "perk_tooltip_BiscuitDelivery",
+                    "rawDisplayName": "perk_displayname_BiscuitDelivery"
+                },
+                {
+                    "displayName": "Cosmic Insight",
+                    "id": 8347,
+                    "rawDescription": "perk_tooltip_CosmicInsight",
+                    "rawDisplayName": "perk_displayname_CosmicInsight"
+                }
+            ],
+            "keystone": {
+                "displayName": "Hail of Blades",
+                "id": 9923,
+                "rawDescription": "perk_tooltip_HailOfBlades",
+                "rawDisplayName": "perk_displayname_HailOfBlades"
+            },
+            "primaryRuneTree": {
+                "displayName": "Domination",
+                "id": 8100,
+                "rawDescription": "perkstyle_tooltip_7200",
+                "rawDisplayName": "perkstyle_displayname_7200"
+            },
+            "secondaryRuneTree": {
+                "displayName": "Inspiration",
+                "id": 8300,
+                "rawDescription": "perkstyle_tooltip_7203",
+                "rawDisplayName": "perkstyle_displayname_7203"
+            },
+            "statRunes": [
+                {
+                    "id": 5005,
+                    "rawDescription": "perk_tooltip_StatModAttackSpeed"
+                },
+                {
+                    "id": 5008,
+                    "rawDescription": "perk_tooltip_StatModAdaptive"
+                },
+                {
+                    "id": 5002,
+                    "rawDescription": "perk_tooltip_StatModArmor"
+                }
+            ]
+        },
+        "level": 1,
+        "summonerName": "Qbeast360"
+    },
+    "allPlayers": [
+        {
+            "championName": "Elise",
+            "isBot": false,
+            "isDead": false,
+            "items": [],
+            "level": 1,
+            "position": "",
+            "rawChampionName": "game_character_displayname_Elise",
+            "respawnTimer": 0.0,
+            "runes": {
+                "keystone": {
+                    "displayName": "Hail of Blades",
+                    "id": 9923,
+                    "rawDescription": "perk_tooltip_HailOfBlades",
+                    "rawDisplayName": "perk_displayname_HailOfBlades"
+                },
+                "primaryRuneTree": {
+                    "displayName": "Domination",
+                    "id": 8100,
+                    "rawDescription": "perkstyle_tooltip_7200",
+                    "rawDisplayName": "perkstyle_displayname_7200"
+                },
+                "secondaryRuneTree": {
+                    "displayName": "Inspiration",
+                    "id": 8300,
+                    "rawDescription": "perkstyle_tooltip_7203",
+                    "rawDisplayName": "perkstyle_displayname_7203"
+                }
+            },
+            "scores": {
+                "assists": 0,
+                "creepScore": 0,
+                "deaths": 0,
+                "kills": 0,
+                "wardScore": 0.0
+            },
+            "skinID": 0,
+            "summonerName": "Qbeast360",
+            "summonerSpells": {
+                "summonerSpellOne": {
+                    "displayName": "Flash",
+                    "rawDescription": "GeneratedTip_SummonerSpell_SummonerFlash_Description",
+                    "rawDisplayName": "GeneratedTip_SummonerSpell_SummonerFlash_DisplayName"
+                },
+                "summonerSpellTwo": {
+                    "displayName": "Smite",
+                    "rawDescription": "GeneratedTip_SummonerSpell_SummonerSmite_Description",
+                    "rawDisplayName": "GeneratedTip_SummonerSpell_SummonerSmite_DisplayName"
+                }
+            },
+            "team": "ORDER"
+        }
+    ],
+    "events": {
+        "Events": [
+            {
+                "EventID": 0,
+                "EventName": "GameStart",
+                "EventTime": 0.030103400349617006
+            },
+            {
+                "EventID": 1,
+                "EventName": "MinionsSpawning",
+                "EventTime": 65.06114196777344
+            }
+        ]
+    },
+    "gameData": {
+        "gameMode": "PRACTICETOOL",
+        "gameTime": 76.51596069335938,
+        "mapName": "Map11",
+        "mapNumber": 11,
+        "mapTerrain": "Default"
+    }
+}
