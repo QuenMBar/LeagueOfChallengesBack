@@ -1,0 +1,2 @@
+class CreatedChallengesController < ApplicationController
+end
