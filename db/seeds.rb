@@ -11,9 +11,9 @@ puts 'Destroy All Tables'
 CreatedChallenge.destroy_all
 Summoner.destroy_all
 Challenge.destroy_all
-Item.destroy_all
-Champion.destroy_all
-SummonerSpell.destroy_all
+# Item.destroy_all
+# Champion.destroy_all
+# SummonerSpell.destroy_all
 
 puts 'Load in Challenges'
 
@@ -44,45 +44,45 @@ all_challenges = [
     ['Serial Killer', 'Go on 2 or more killing sprees', 'overall'],
 ]
 
-all_challenges.each { |c| Challenge.create(name: c[0], text: c[1], challenge_type: c[2]) }
+# all_challenges.each { |c| Challenge.create(name: c[0], text: c[1], challenge_type: c[2]) }
 
-puts 'Load in Champions'
+# puts 'Load in Champions'
 
-all_champions = HTTParty.get('http://ddragon.leagueoflegends.com/cdn/11.9.1/data/en_US/champion.json')
-all_champions['data'].each do |c|
-    specific_champ =
-        HTTParty.get("http://ddragon.leagueoflegends.com/cdn/11.9.1/data/en_US/champion/#{c[0]}.json")['data'][c[0]]
-    Champion.create(
-        name: specific_champ['name'],
-        key: specific_champ['key'],
-        title: specific_champ['title'],
-        tags: specific_champ['tags'],
-        stats: specific_champ['stats'],
-        spell_1_name: specific_champ['spells'][0]['name'],
-        spell_2_name: specific_champ['spells'][1]['name'],
-        spell_3_name: specific_champ['spells'][2]['name'],
-        spell_4_name: specific_champ['spells'][3]['name'],
-    )
-end
+# all_champions = HTTParty.get('http://ddragon.leagueoflegends.com/cdn/11.9.1/data/en_US/champion.json')
+# all_champions['data'].each do |c|
+#     specific_champ =
+#         HTTParty.get("http://ddragon.leagueoflegends.com/cdn/11.9.1/data/en_US/champion/#{c[0]}.json")['data'][c[0]]
+#     Champion.create(
+#         name: specific_champ['name'],
+#         key: specific_champ['key'],
+#         title: specific_champ['title'],
+#         tags: specific_champ['tags'],
+#         stats: specific_champ['stats'],
+#         spell_1_name: specific_champ['spells'][0]['name'],
+#         spell_2_name: specific_champ['spells'][1]['name'],
+#         spell_3_name: specific_champ['spells'][2]['name'],
+#         spell_4_name: specific_champ['spells'][3]['name'],
+#     )
+# end
 
-puts 'Load in Items'
+# puts 'Load in Items'
 
-all_items = HTTParty.get('http://ddragon.leagueoflegends.com/cdn/11.9.1/data/en_US/item.json')
-all_items['data'].each do |i|
-    mythic_bool = i[1]['description'].include? 'rarityMythic'
-    Item.create(
-        name: i[1]['name'],
-        key: i[0],
-        maps: i[1]['maps'],
-        tags: i[1]['tags'],
-        price: i[1]['gold']['total'],
-        mythic: mythic_bool,
-    )
-end
+# all_items = HTTParty.get('http://ddragon.leagueoflegends.com/cdn/11.9.1/data/en_US/item.json')
+# all_items['data'].each do |i|
+#     mythic_bool = i[1]['description'].include? 'rarityMythic'
+#     Item.create(
+#         name: i[1]['name'],
+#         key: i[0],
+#         maps: i[1]['maps'],
+#         tags: i[1]['tags'],
+#         price: i[1]['gold']['total'],
+#         mythic: mythic_bool,
+#     )
+# end
 
-puts 'Load in Summoner Spells'
+# puts 'Load in Summoner Spells'
 
-all_summoner_spells = HTTParty.get('http://ddragon.leagueoflegends.com/cdn/11.9.1/data/en_US/summoner.json')
-all_summoner_spells['data'].each { |s| SummonerSpell.create(name: s[0], key: s[1]['key']) }
+# all_summoner_spells = HTTParty.get('http://ddragon.leagueoflegends.com/cdn/11.9.1/data/en_US/summoner.json')
+# all_summoner_spells['data'].each { |s| SummonerSpell.create(name: s[1]['name'], key: s[1]['key']) }
 
 puts 'All Done!'
