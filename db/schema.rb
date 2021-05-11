@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_10_213616) do
+ActiveRecord::Schema.define(version: 2021_05_10_235442) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,6 +32,10 @@ ActiveRecord::Schema.define(version: 2021_05_10_213616) do
     t.string "stats"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "spell_1_name"
+    t.string "spell_2_name"
+    t.string "spell_3_name"
+    t.string "spell_4_name"
   end
 
   create_table "created_challenges", force: :cascade do |t|
@@ -64,6 +68,7 @@ ActiveRecord::Schema.define(version: 2021_05_10_213616) do
     t.boolean "mythic"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "price"
   end
 
   create_table "summoner_spells", force: :cascade do |t|
