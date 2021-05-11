@@ -44,7 +44,7 @@ all_challenges = [
     ['Serial Killer', 'Go on 2 or more killing sprees', 'overall'],
 ]
 
-# all_challenges.each { |c| Challenge.create(name: c[0], text: c[1], challenge_type: c[2]) }
+all_challenges.each { |c| Challenge.create(name: c[0], text: c[1], challenge_type: c[2]) }
 
 # puts 'Load in Champions'
 
