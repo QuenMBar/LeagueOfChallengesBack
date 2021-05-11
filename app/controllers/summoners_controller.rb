@@ -26,16 +26,27 @@ class SummonersController < ApplicationController
             if (game['status'].nil?)
                 chal_exist = s.created_challenges.where(game_id: game['gameId']).exists?
                 if (!chal_exist)
+                    # Parse challenge to pick
+                    chal = Challenge.find_by(name: "Don't use a Summoner Spell")
+
                     cc =
                         CreatedChallenge.create(
                             summoner: s,
-                            challenge: Challenge.all.sample,
+                            challenge: chal,
                             attempted: false,
                             game_id: game['gameId'],
                             map_id: game['mapId'],
                             participants_json: game['participants'],
                             platform_id: game['platformId'],
                         )
+
+                    # Parse out any replacements
+                    if chal.text.include? '<summoner_spell>'
+                        game_player = game['participants'].select { |p| p['summonerId'] == s.summoner_id }
+                        cc.summoner_spell = game_player[0]['spell1Id']
+                        cc.save
+                    end
+
                     render json: cc, include: %i[summoner challenge]
                 else
                     current_chal = s.created_challenges.where(game_id: game['gameId'])
@@ -76,23 +87,26 @@ class SummonersController < ApplicationController
 
     def parse_challenges(challenge)
         case challenge.challenge.name
-        when "Don't Flash"
+        when "Don't use a Summoner Spell"
             match_json = JSON.parse(challenge.match_json)
             player = match_json['info']['participants'].select { |p| p['puuid'] == challenge.summoner.puuid }[0]
-            flash_ammount = 0
-            if player['summoner1Id'] == 4
-                flash_ammount = player['summoner1Casts']
-            elsif player['summoner2Id'] == 4
-                flash_ammount = player['summoner2Casts']
+            spell_ammount = 0
+
+            if player['summoner1Id'] == challenge.summoner_spell.to_i
+                spell_ammount = player['summoner1Casts'].to_i
+            elsif player['summoner2Id'] == challenge.summoner_spell.to_i
+                spell_ammount = player['summoner2Casts'].to_i
             end
 
-            if flash_ammount == 0
+            spell_name = SummonerSpell.find_by(key: challenge.summoner_spell.to_s).name
+
+            if spell_ammount == 0
                 challenge.challenge_succeeded = true
-                challenge.challenge_status = 'You did it, and only flashed 0 times'
+                challenge.challenge_status = "You did it! You used #{spell_name} 0 times"
             else
                 challenge.challenge_succeeded = false
                 challenge.challenge_status =
-                    "You flashed #{flash_ammount} times, and you werent supposed to flash at all"
+                    "You used #{spell_name} #{spell_ammount} times, and you weren't supposed to use #{spell_name} at all"
             end
         else
             challenge.challenge_succeeded = false

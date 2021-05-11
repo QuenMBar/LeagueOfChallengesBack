@@ -11,9 +11,9 @@ puts 'Destroy All Tables'
 CreatedChallenge.destroy_all
 Summoner.destroy_all
 Challenge.destroy_all
-Item.destroy_all
-Champion.destroy_all
-SummonerSpell.destroy_all
+# Item.destroy_all
+# Champion.destroy_all
+# SummonerSpell.destroy_all
 
 puts 'Load in Challenges'
 
@@ -42,8 +42,7 @@ all_challenges = [
     ['No Mercy', 'Make the other team surrender', 'overall'], #gameEndedinSurrender
     ['Serial Killer', 'Go on 2 or more killing sprees', 'overall'], #killingSprees
     ['Archmage', 'Deal the most magic damage in the game', 'mage'], #magicDamageDealt
-    ['Living Legend', 'Stay alive the entire game,' 'overall'], #deaths
-    []
+    ['Living Legend', 'Stay alive the entire game', 'overall'], #deaths
 ]
 
 all_challenges.each { |c| Challenge.create(name: c[0], text: c[1], challenge_type: c[2]) }
@@ -85,6 +84,6 @@ end
 puts 'Load in Summoner Spells'
 
 all_summoner_spells = HTTParty.get('http://ddragon.leagueoflegends.com/cdn/11.9.1/data/en_US/summoner.json')
-all_summoner_spells['data'].each { |s| SummonerSpell.create(name: s[0], key: s[1]['key']) }
+all_summoner_spells['data'].each { |s| SummonerSpell.create(name: s[1]['name'], key: s[1]['key']) }
 
 puts 'All Done!'
