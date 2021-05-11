@@ -1,0 +1,16 @@
+2021-05-11 10:36:36.390 PDT [27614] LOG:  starting PostgreSQL 13.1 on arm-apple-darwin20.2.0, compiled by Apple clang version 12.0.0 (clang-1200.0.32.28), 64-bit
+2021-05-11 10:36:36.391 PDT [27614] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2021-05-11 10:36:36.391 PDT [27614] LOG:  listening on IPv6 address "::1", port 5432
+2021-05-11 10:36:36.391 PDT [27614] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2021-05-11 10:36:36.394 PDT [27615] LOG:  database system was shut down at 2021-05-11 10:36:11 PDT
+2021-05-11 10:36:36.396 PDT [27614] LOG:  database system is ready to accept connections
+2021-05-11 10:36:46.784 PDT [27624] FATAL:  database "LeagueOfChallengesBack_development" does not exist
+2021-05-11 10:51:04.738 PDT [27614] LOG:  server process (PID 58368) was terminated by signal 9: Killed: 9
+2021-05-11 10:51:04.738 PDT [27614] LOG:  terminating any other active server processes
+2021-05-11 10:51:04.738 PDT [27619] WARNING:  terminating connection because of crash of another server process
+2021-05-11 10:51:04.738 PDT [27619] DETAIL:  The postmaster has commanded this server process to roll back the current transaction and exit, because another server process exited abnormally and possibly corrupted shared memory.
+2021-05-11 10:51:04.738 PDT [27619] HINT:  In a moment you should be able to reconnect to the database and repeat your command.
+2021-05-11 10:51:04.739 PDT [27614] LOG:  all server processes terminated; reinitializing
+2021-05-11 10:51:04.742 PDT [27614] LOG:  startup process (PID 58370) was terminated by signal 9: Killed: 9
+2021-05-11 10:51:04.742 PDT [27614] LOG:  aborting startup due to startup process failure
+2021-05-11 10:51:04.742 PDT [27614] LOG:  database system is shut down
