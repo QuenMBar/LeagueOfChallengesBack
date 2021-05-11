@@ -1,1 +1,0 @@
-/opt/homebrew/Cellar/postgresql/13.1/bin/postgres "-D" "mydata"
