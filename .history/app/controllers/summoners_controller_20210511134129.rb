@@ -86,11 +86,10 @@ class SummonersController < ApplicationController
     end
 
     def parse_challenges(challenge)
-        match_json = JSON.parse(challenge.match_json)
-        player = match_json['info']['participants'].select { |p| p['puuid'] == challenge.summoner.puuid }[0]
-        
         case challenge.challenge.name
         when "Don't use a Summoner Spell"
+            match_json = JSON.parse(challenge.match_json)
+            player = match_json['info']['participants'].select { |p| p['puuid'] == challenge.summoner.puuid }[0]
             spell_ammount = 0
 
             if player['summoner1Id'] == challenge.summoner_spell.to_i
@@ -109,74 +108,6 @@ class SummonersController < ApplicationController
                 challenge.challenge_status =
                     "You used #{spell_name} #{spell_ammount} times, and you weren't supposed to use #{spell_name} at all"
             end
-        when "Fast Win"
-            time_played = match_json['info']['gameDuration'].to_i/60000
-
-            if player['win'] == true && time_played <= 25
-                challenge.challenge_succeeded = true
-                challenge.challenge_status = "You did it! You won the game in #{time_played} minutes"
-            else
-                challenge.challenge_succeeded = false
-                challenge.challenge_status =
-                "You did not win the game in 25 minutes or less"
-                
-            end
-        when "Living Legend"
-
-            if player['deaths'] == 0
-                challenge.challenge_succeeded = true
-                challenge.challenge_status = "You did it! You stayed alive the entire game"
-            else
-                challenge.challenge_succeeded = false
-                challenge.challenge_status =
-                "You did not win the game without dying"
-            end
-        when 'Iron Defense'
-            inhibs_lost = player["inhibitorsLost"]
-        
-
-            if inhibs_lost == 0
-                challenge.challenge_succeeded = true
-                challenge.challenge_status = "You did it! You lost 0 turrets"
-            else
-                challenge.challenge_succeeded = false
-                challenge.challenge_status =
-                "You failed. You lost #{inhibs_lost} inhibitors"
-            end
-
-        when 'No Mercy'
-           
-            if player['gameEndedInSurrender'] == true && player['win'] == true
-                challenge.challenge_succeeded = true
-                challenge.challenge_status = "You did it! You made the enemy team surrender"
-            else
-                challenge.challenge_succeeded = false
-                challenge.challenge_status =
-                "You failed at making the enemy team surrender"
-            end
-        
-        when 'Good Start'
-            byebug
-
-            if player['firstBloodKill'] == true || player['firstBloodAssist'] == true
-                challenge.challenge_succeeded = true
-                challenge.challenge_status = "You did it! You got first blood for your team"
-            else
-                challenge.challenge_succeeded = false
-                challenge.challenge_status =
-                "You failed at getting first blood"
-            end
-        
-        when 'First Tower' #still need to test
-            if player['firstTowerAssist'] == true || player['firstTowerKill'] == true
-                challenge.challenge_succeeded = true
-                challenge.challenge_status = "You did it! You got the first tower kill"
-            else
-                challenge.challenge_succeeded = false
-                challenge.challenge_status =
-                "You failed at getting first tower"
-            end
-
         else
             challenge.challenge_succeeded = false
             challenge.challenge_status = 'This challenge never existed, congrats on breaking the game'

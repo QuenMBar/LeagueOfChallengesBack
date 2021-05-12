@@ -27,7 +27,7 @@ class SummonersController < ApplicationController
                 chal_exist = s.created_challenges.where(game_id: game['gameId']).exists?
                 if (!chal_exist)
                     # Parse challenge to pick
-                    chal = Challenge.find_by(name: "Don't use a Summoner Spell")
+                    chal = Challenge.find_by(name: 'Good Start')
 
                     cc =
                         CreatedChallenge.create(

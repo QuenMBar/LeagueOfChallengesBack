@@ -27,7 +27,7 @@ class SummonersController < ApplicationController
                 chal_exist = s.created_challenges.where(game_id: game['gameId']).exists?
                 if (!chal_exist)
                     # Parse challenge to pick
-                    chal = Challenge.find_by(name: "Don't use a Summoner Spell")
+                    chal = Challenge.find_by(name: 'Iron Defense')
 
                     cc =
                         CreatedChallenge.create(
@@ -145,7 +145,7 @@ class SummonersController < ApplicationController
             end
 
         when 'No Mercy'
-           
+
             if player['gameEndedInSurrender'] == true && player['win'] == true
                 challenge.challenge_succeeded = true
                 challenge.challenge_status = "You did it! You made the enemy team surrender"
@@ -153,28 +153,6 @@ class SummonersController < ApplicationController
                 challenge.challenge_succeeded = false
                 challenge.challenge_status =
                 "You failed at making the enemy team surrender"
-            end
-        
-        when 'Good Start'
-            byebug
-
-            if player['firstBloodKill'] == true || player['firstBloodAssist'] == true
-                challenge.challenge_succeeded = true
-                challenge.challenge_status = "You did it! You got first blood for your team"
-            else
-                challenge.challenge_succeeded = false
-                challenge.challenge_status =
-                "You failed at getting first blood"
-            end
-        
-        when 'First Tower' #still need to test
-            if player['firstTowerAssist'] == true || player['firstTowerKill'] == true
-                challenge.challenge_succeeded = true
-                challenge.challenge_status = "You did it! You got the first tower kill"
-            else
-                challenge.challenge_succeeded = false
-                challenge.challenge_status =
-                "You failed at getting first tower"
             end
 
         else

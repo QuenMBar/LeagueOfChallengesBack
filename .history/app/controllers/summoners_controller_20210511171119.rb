@@ -27,7 +27,7 @@ class SummonersController < ApplicationController
                 chal_exist = s.created_challenges.where(game_id: game['gameId']).exists?
                 if (!chal_exist)
                     # Parse challenge to pick
-                    chal = Challenge.find_by(name: "Don't use a Summoner Spell")
+                    chal = Challenge.find_by(name: 'Good Start')
 
                     cc =
                         CreatedChallenge.create(
@@ -167,7 +167,7 @@ class SummonersController < ApplicationController
                 "You failed at getting first blood"
             end
         
-        when 'First Tower' #still need to test
+        when 'First Tower'
             if player['firstTowerAssist'] == true || player['firstTowerKill'] == true
                 challenge.challenge_succeeded = true
                 challenge.challenge_status = "You did it! You got the first tower kill"
