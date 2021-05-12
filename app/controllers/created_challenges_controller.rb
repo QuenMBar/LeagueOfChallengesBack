@@ -23,7 +23,7 @@ class CreatedChallengesController < ApplicationController
                             attempted: false,
                             game_id: game['gameId'],
                             map_id: game['mapId'],
-                            participants_json: game['participants'],
+                            participants_json: game,
                             platform_id: game['platformId'],
                         )
 
@@ -51,7 +51,7 @@ class CreatedChallengesController < ApplicationController
     def show
         s = Summoner.find_by(name: params[:id])
         if !s.nil?
-            all_chal = s.created_challenges
+            all_chal = s.created_challenges.order(created_at: :desc)
 
             render json: all_chal, include: %i[summoner challenge]
         else
