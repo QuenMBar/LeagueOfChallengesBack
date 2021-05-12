@@ -5,23 +5,17 @@ class SummonersController < ApplicationController
         if s.nil?
             riot_api = RiotApiSummoner.new
             new_sum = riot_api.summoner(params[:id])
-            if (new_sum['status'].nil?)
-                s =
-                    Summoner.create(
-                        summoner_id: new_sum['id'],
-                        account_id: new_sum['accountId'],
-                        puuid: new_sum['puuid'],
-                        name: new_sum['name'],
-                        profile_icon_id: new_sum['profileIconId'],
-                        summoner_level: new_sum['summonerLevel'],
-                    )
-                render json: s
-            else
-                render json: {}
-            end
-        else
-            render json: s
+            s =
+                Summoner.create(
+                    summoner_id: new_sum['id'],
+                    account_id: new_sum['accountId'],
+                    puuid: new_sum['puuid'],
+                    name: new_sum['name'],
+                    profile_icon_id: new_sum['profileIconId'],
+                    summoner_level: new_sum['summonerLevel'],
+                )
         end
+        render json: s
     end
 
     def new_challenges
@@ -33,7 +27,7 @@ class SummonersController < ApplicationController
                 chal_exist = s.created_challenges.where(game_id: game['gameId']).exists?
                 if (!chal_exist)
                     # Parse challenge to pick
-                    chal = Challenge.find_by(name: "Don't use a Summoner Spell")
+                    chal = Challenge.find_by(name: 'Good Start')
 
                     cc =
                         CreatedChallenge.create(
@@ -173,7 +167,7 @@ class SummonersController < ApplicationController
                 "You failed at getting first blood"
             end
         
-        when 'First Tower' #still need to test
+        when 'First Tower'
             if player['firstTowerAssist'] == true || player['firstTowerKill'] == true
                 challenge.challenge_succeeded = true
                 challenge.challenge_status = "You did it! You got the first tower kill"

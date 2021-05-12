@@ -24,13 +24,13 @@ all_challenges = [
     ["Don't use a consumable", "Don't use a consumable all game!", 'overall'],
     ["Don't use a spell", "Don't use your <champion_spell> all game!", 'overall'],
     ["Don't get too buff", "Don't let your hp exceed 3000!", 'tank'],
-    ['Fast Win', 'Win a game in 25 minutes or less', 'overall'],
+    ['Fast Win', 'Win a game in 20 minutes or less', 'overall'],
     ['Dragon Master', 'Kill 3 dragons as a team', 'overall'], #dragonKills
     ['Thief', 'Steal 2 objectives', 'jungle'], #objectivesStolen
     ['Team Player', 'Get 15 or more assists', 'support'], #assists
     ['Farm to Win', 'Kill over 200 minions', 'marksman'], #totalMinionsKilled
     ['Baron Shutout', 'Allow the enemy team 0 baron kills', 'overall'], #baronKills
-    ['Good Start', 'Get first blood or a first blood assist', 'overall'], #firstBloodKill
+    ['Good Start', 'Get first blood', 'overall'], #firstBloodKill
     ['Big Baller', 'Spend more gold than anyone else in the game', 'overall'], #goldSpent
     ['Lee Sin Method Acting', 'Place 0 wards', 'overall'], #wardsPlaced
     ['Try Hard', 'Get the most turret kills on your team', 'overall'], #turretKills
@@ -42,7 +42,7 @@ all_challenges = [
     ['No Mercy', 'Make the other team surrender', 'overall'], #gameEndedinSurrender
     ['Serial Killer', 'Go on 2 or more killing sprees', 'overall'], #killingSprees
     ['Archmage', 'Deal the most magic damage in the game', 'mage'], #magicDamageDealt
-    ['Living Legend', 'Stay alive the entire game with 0 deaths', 'overall'], #deaths
+    ['Living Legend', 'Stay alive the entire game', 'overall'], #deaths
 ]
 
 all_challenges.each { |c| Challenge.create(name: c[0], text: c[1], challenge_type: c[2]) }

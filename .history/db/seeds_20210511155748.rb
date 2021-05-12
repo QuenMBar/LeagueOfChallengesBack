@@ -30,7 +30,7 @@ all_challenges = [
     ['Team Player', 'Get 15 or more assists', 'support'], #assists
     ['Farm to Win', 'Kill over 200 minions', 'marksman'], #totalMinionsKilled
     ['Baron Shutout', 'Allow the enemy team 0 baron kills', 'overall'], #baronKills
-    ['Good Start', 'Get first blood or a first blood assist', 'overall'], #firstBloodKill
+    ['Good Start', 'Get first blood', 'overall'], #firstBloodKill
     ['Big Baller', 'Spend more gold than anyone else in the game', 'overall'], #goldSpent
     ['Lee Sin Method Acting', 'Place 0 wards', 'overall'], #wardsPlaced
     ['Try Hard', 'Get the most turret kills on your team', 'overall'], #turretKills
