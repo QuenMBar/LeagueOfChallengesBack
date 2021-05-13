@@ -1,6 +1,6 @@
 class SummonersController < ApplicationController
     def show
-        s = Summoner.find_by(name: params[:id])
+        s = Summoner.where('lower(name) = ?', params[:id].downcase).first
 
         if s.nil?
             riot_api = RiotApiSummoner.new
