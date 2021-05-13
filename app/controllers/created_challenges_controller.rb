@@ -5,6 +5,12 @@ class CreatedChallengesController < ApplicationController
         render json: {}
     end
 
+    def index 
+       summoners = Summoner.all
+       
+       render json: summoners
+    end
+
     def create
         s = Summoner.find_by(name: params[:summoner])
         if !s.nil?
