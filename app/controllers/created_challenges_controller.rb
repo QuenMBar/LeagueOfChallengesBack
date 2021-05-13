@@ -20,25 +20,38 @@ class CreatedChallengesController < ApplicationController
                 chal_exist = s.created_challenges.where(game_id: game['gameId']).exists?
                 if (!chal_exist)
                     # Parse challenge to pick
-                    chal = Challenge.find_by(name: 'MVP')
+                    Challenge
+                        .all
+                        .sample(3)
+                        .each do |chal|
+                            cc =
+                                CreatedChallenge.create(
+                                    summoner: s,
+                                    challenge: chal,
+                                    attempted: false,
+                                    game_id: game['gameId'],
+                                    map_id: game['gameQueueConfigId'],
+                                    participants_json: game,
+                                    platform_id: game['platformId'],
+                                    champion:
+                                        Champion.find_by(
+                                            key:
+                                                game['participants'].select { |p| p['summonerId'] == s.summoner_id }[0][
+                                                    'championId'
+                                                ],
+                                        ),
+                                )
 
-                    cc =
-                        CreatedChallenge.create(
-                            summoner: s,
-                            challenge: chal,
-                            attempted: false,
-                            game_id: game['gameId'],
-                            map_id: game['gameQueueConfigId'],
-                            participants_json: game,
-                            platform_id: game['platformId'],
-                        )
-
-                    # Parse out any replacements
-                    if chal.text.include? '<summoner_spell>'
-                        game_player = game['participants'].select { |p| p['summonerId'] == s.summoner_id }
-                        cc.summoner_spell = game_player[0]['spell1Id']
-                        cc.save
-                    end
+                            # Parse out any replacements
+                            if chal.text.include? '<summoner_spell>'
+                                game_player = game['participants'].select { |p| p['summonerId'] == s.summoner_id }
+                                cc.summoner_spell = game_player[0]['spell1Id']
+                                cc.save
+                            elsif chal.text.include? '<champion_spell>'
+                                cc.champion_spell = [1, 2, 3, 4].sample
+                                cc.save
+                            end
+                        end
 
                     render json: cc, include: %i[summoner challenge]
                 else
@@ -96,8 +109,6 @@ class CreatedChallengesController < ApplicationController
         player = match_json['info']['participants'].select { |p| p['puuid'] == challenge.summoner.puuid }[0]
         participant_id = player['participantId']
         timeline_json = JSON.parse(challenge.timeline_json)
-
-        byebug
 
         case challenge.challenge.name
         when "Don't use a Summoner Spell"
@@ -371,6 +382,55 @@ class CreatedChallengesController < ApplicationController
             else
                 challenge.challenge_succeeded = false
                 challenge.challenge_status = "You failed. Your max health was #{max_health}"
+            end
+        when "Don't use a spell"
+            spell_ammount = player["spell#{challenge.champion_spell}Casts"].to_i
+
+            spell_name = ''
+            case challenge.champion_spell.to_i
+            when 1
+                spell_name = challenge.champion.spell_1_name
+            when 2
+                spell_name = challenge.champion.spell_2_name
+            when 3
+                spell_name = challenge.champion.spell_3_name
+            when 4
+                spell_name = challenge.champion.spell_4_name
+            end
+
+            if spell_ammount == 0
+                challenge.challenge_succeeded = true
+                challenge.challenge_status = "You did it! You used #{spell_name} 0 times"
+            else
+                challenge.challenge_succeeded = false
+                challenge.challenge_status =
+                    "You used #{spell_name} #{spell_ammount} times, and you weren't supposed to use #{spell_name} at all"
+            end
+        when 'Dragon Master'
+            dragons =
+                match_json['info']['teams'].select { |t| t['teamId'] == player['teamId'] }[0]['objectives']['dragon'][
+                    'kills'
+                ].to_i
+
+            if dragons >= 3
+                challenge.challenge_succeeded = true
+                challenge.challenge_status = "You did it! You killed #{dragons} dragons"
+            else
+                challenge.challenge_succeeded = false
+                challenge.challenge_status = "You failed. You killed #{dragons} dragons"
+            end
+        when 'Baron Shutout'
+            barons =
+                match_json['info']['teams'].select { |t| t['teamId'] != player['teamId'] }[0]['objectives']['baron'][
+                    'kills'
+                ].to_i
+
+            if barons == 0
+                challenge.challenge_succeeded = true
+                challenge.challenge_status = "You did it! You let the enemy have #{barons} barons"
+            else
+                challenge.challenge_succeeded = false
+                challenge.challenge_status = "You failed. You the enemy killed #{barons} barons"
             end
         else
             challenge.challenge_succeeded = false
