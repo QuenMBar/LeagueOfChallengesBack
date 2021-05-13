@@ -14,6 +14,7 @@ Challenge.destroy_all
 Item.destroy_all
 Champion.destroy_all
 SummonerSpell.destroy_all
+LeagueQueue.destroy_all
 
 puts 'Load in Challenges'
 
@@ -22,7 +23,7 @@ puts 'Load in Challenges'
 all_challenges = [
     ["Don't use a Summoner Spell", "Don't use your <summoner_spell> all game!", 'overall'], # x
     ["Don't purchase a consumable", "Don't purchase a consumable all game!", 'overall'], # x
-    ["Don't use a spell", "Don't use your <champion_spell> all game!", 'overall'], 
+    ["Don't use a spell", "Don't use your <champion_spell> all game!", 'overall'],
     ["Don't get too buff", "Don't let your hp exceed 3000!", 'tank'], # x
     ['Fast Win', 'Win a game in 25 minutes or less', 'overall'], # x
     ['Dragon Master', 'Kill 3 dragons as a team', 'overall'], #dragonKills x
@@ -46,7 +47,7 @@ all_challenges = [
     ['Ward Hunter', 'Destroy 10 or more wards', 'overall'], # x
     ['MVP', 'Deal more damage than anyone else', 'overall'], # x
     ['Huge Pockets', 'Have over 2500 gold at anytime during the game', 'overall'], # x
-    ['Glass Cannon', 'Never have over 100 armor', 'overall'] # x
+    ['Glass Cannon', 'Never have over 100 armor', 'overall'], # x
 ]
 
 all_challenges.each { |c| Challenge.create(name: c[0], text: c[1], challenge_type: c[2]) }
@@ -89,5 +90,10 @@ puts 'Load in Summoner Spells'
 
 all_summoner_spells = HTTParty.get('http://ddragon.leagueoflegends.com/cdn/11.9.1/data/en_US/summoner.json')
 all_summoner_spells['data'].each { |s| SummonerSpell.create(name: s[1]['name'], key: s[1]['key']) }
+
+puts 'Load in Queues'
+
+all_queues = HTTParty.get('http://static.developer.riotgames.com/docs/lol/queues.json')
+all_queues.each { |q| LeagueQueue.create(queueId: q['queueId'], map: q['map'], description: q['description']) }
 
 puts 'All Done!'

@@ -14,7 +14,7 @@ class CreatedChallengesController < ApplicationController
                 chal_exist = s.created_challenges.where(game_id: game['gameId']).exists?
                 if (!chal_exist)
                     # Parse challenge to pick
-                    chal = Challenge.find_by(name: "MVP")
+                    chal = Challenge.find_by(name: 'MVP')
 
                     cc =
                         CreatedChallenge.create(
@@ -22,7 +22,7 @@ class CreatedChallengesController < ApplicationController
                             challenge: chal,
                             attempted: false,
                             game_id: game['gameId'],
-                            map_id: game['mapId'],
+                            map_id: game['gameQueueConfigId'],
                             participants_json: game,
                             platform_id: game['platformId'],
                         )
@@ -51,9 +51,9 @@ class CreatedChallengesController < ApplicationController
     def show
         s = Summoner.find_by(name: params[:id])
         if !s.nil?
-            all_chal = s.created_challenges
+            all_chal = s.created_challenges.order(created_at: :desc)
 
-            render json: all_chal, include: %i[summoner challenge]
+            render json: all_chal, include: %i[summoner challenge champion item]
         else
             render status: 400
         end
@@ -90,9 +90,9 @@ class CreatedChallengesController < ApplicationController
         player = match_json['info']['participants'].select { |p| p['puuid'] == challenge.summoner.puuid }[0]
         participant_id = player['participantId']
         timeline_json = JSON.parse(challenge.timeline_json)
-        
+
         byebug
-        
+
         case challenge.challenge.name
         when "Don't use a Summoner Spell"
             spell_ammount = 0
@@ -124,7 +124,6 @@ class CreatedChallengesController < ApplicationController
                 challenge.challenge_status = 'You did not win the game in 25 minutes or less'
             end
         when 'Living Legend'
-            
             if player['deaths'] == 0
                 challenge.challenge_succeeded = true
                 challenge.challenge_status = 'You did it! You stayed alive the entire game'
@@ -143,7 +142,6 @@ class CreatedChallengesController < ApplicationController
                 challenge.challenge_status = "You failed. You lost #{inhibs_lost} inhibitors"
             end
         when 'No Mercy'
-            
             if player['gameEndedInSurrender'] == true && player['win'] == true
                 challenge.challenge_succeeded = true
                 challenge.challenge_status = 'You did it! You made the enemy team surrender'
@@ -152,7 +150,6 @@ class CreatedChallengesController < ApplicationController
                 challenge.challenge_status = 'You failed at making the enemy team surrender'
             end
         when 'Good Start'
-
             if player['firstBloodKill'] == true || player['firstBloodAssist'] == true
                 challenge.challenge_succeeded = true
                 challenge.challenge_status = 'You did it! You got first blood for your team'
@@ -161,7 +158,6 @@ class CreatedChallengesController < ApplicationController
                 challenge.challenge_status = 'You failed at getting first blood'
             end
         when 'First Tower'
-            
             if player['firstTowerAssist'] == true || player['firstTowerKill'] == true
                 challenge.challenge_succeeded = true
                 challenge.challenge_status = 'You did it! You got the first tower kill'
@@ -170,7 +166,7 @@ class CreatedChallengesController < ApplicationController
                 challenge.challenge_status = 'You failed at getting first tower'
             end
         when 'Team Player'
-            assists = player['assists'] 
+            assists = player['assists']
 
             if assists >= 15
                 challenge.challenge_succeeded = true
@@ -180,8 +176,8 @@ class CreatedChallengesController < ApplicationController
                 challenge.challenge_status = "You failed. You got #{assists} assists"
             end
         when "Don't purchase a consumable"
-            cons_used = player['consumablesPurchased'] 
-            
+            cons_used = player['consumablesPurchased']
+
             if cons_used < 0
                 challenge.challenge_succeeded = true
                 challenge.challenge_status = "You did it! You used #{cons_used} consumables"
@@ -189,9 +185,9 @@ class CreatedChallengesController < ApplicationController
                 challenge.challenge_succeeded = false
                 challenge.challenge_status = "You failed. You used #{cons_used} consumables"
             end
-        when "Lee Sin Method Acting"
-            wards_placed = player['wardsPlaced'] 
-            
+        when 'Lee Sin Method Acting'
+            wards_placed = player['wardsPlaced']
+
             if wards_placed < 0
                 challenge.challenge_succeeded = true
                 challenge.challenge_status = "You did it! You placed #{wards_placed} wards"
@@ -199,9 +195,9 @@ class CreatedChallengesController < ApplicationController
                 challenge.challenge_succeeded = false
                 challenge.challenge_status = "You failed. You placed #{wards_placed} wards"
             end
-        when "All-Seeing Eye"
-            wards_placed = player['wardsPlaced'] 
-            
+        when 'All-Seeing Eye'
+            wards_placed = player['wardsPlaced']
+
             if wards_placed > 25
                 challenge.challenge_succeeded = true
                 challenge.challenge_status = "You did it! You placed #{wards_placed} wards"
@@ -209,9 +205,9 @@ class CreatedChallengesController < ApplicationController
                 challenge.challenge_succeeded = false
                 challenge.challenge_status = "You failed. You placed #{wards_placed} wards"
             end
-        when "Ward Hunter"
-            wards_destroyed = player['wardsKilled'] 
-            
+        when 'Ward Hunter'
+            wards_destroyed = player['wardsKilled']
+
             if wards_destroyed > 10
                 challenge.challenge_succeeded = true
                 challenge.challenge_status = "You did it! You destroyed #{wards_destroyed} wards"
@@ -220,8 +216,19 @@ class CreatedChallengesController < ApplicationController
                 challenge.challenge_status = "You failed. You destroyed #{wards_destroyed} wards"
             end
         when "Don't get too buff"
-            max_health = timeline_json['info']['frames'].max_by { |f| f["participantFrames"][participant_id.to_s]["championStats"]["health"] }["participantFrames"][participant_id.to_s]["championStats"]["health"]
-            
+            max_health =
+                timeline_json['info']['frames'].max_by do |f|
+                    f['participantFrames'][participant_id.to_s]['championStats']['health']
+                end[
+                    'participantFrames'
+                ][
+                    participant_id.to_s
+                ][
+                    'championStats'
+                ][
+                    'health'
+                ]
+
             if max_health < 3000
                 challenge.challenge_succeeded = true
                 challenge.challenge_status = "You did it! Your max health was #{max_health}"
@@ -229,67 +236,69 @@ class CreatedChallengesController < ApplicationController
                 challenge.challenge_succeeded = false
                 challenge.challenge_status = "You failed. Your max health was #{max_health}"
             end
-        when "Big Baller"
-            
-            if match_json['info']['participants'].max_by {|p| p['goldSpent']}['puuid'] == challenge.summoner.puuid
+        when 'Big Baller'
+            if match_json['info']['participants'].max_by { |p| p['goldSpent'] }['puuid'] == challenge.summoner.puuid
                 challenge.challenge_succeeded = true
-                challenge.challenge_status = "You did it! You spent the most gold last game"
+                challenge.challenge_status = 'You did it! You spent the most gold last game'
             else
                 challenge.challenge_succeeded = false
-                challenge.challenge_status = "You failed. You did not spend the most gold last game"
+                challenge.challenge_status = 'You failed. You did not spend the most gold last game'
             end
-        when "Killionaire"
-            
-            if match_json['info']['participants'].max_by {|p| p['largestMultiKill']}['puuid'] == challenge.summoner.puuid
+        when 'Killionaire'
+            if match_json['info']['participants'].max_by { |p| p['largestMultiKill'] }['puuid'] ==
+                   challenge.summoner.puuid
                 challenge.challenge_succeeded = true
-                challenge.challenge_status = "You did it! You got the largest Multikill last game"
+                challenge.challenge_status = 'You did it! You got the largest Multikill last game'
             else
                 challenge.challenge_succeeded = false
-                challenge.challenge_status = "You failed. You did not get the largest Multikill last game"
+                challenge.challenge_status = 'You failed. You did not get the largest Multikill last game'
             end
-        when "Punching Bag"
+        when 'Punching Bag'
             damage_taken = player['totalDamageTaken']
-            
-            if match_json['info']['participants'].max_by {|p| p['totalDamageTaken']}['puuid'] == challenge.summoner.puuid
+
+            if match_json['info']['participants'].max_by { |p| p['totalDamageTaken'] }['puuid'] ==
+                   challenge.summoner.puuid
                 challenge.challenge_succeeded = true
                 challenge.challenge_status = "You did it! You took #{damage_taken} damage"
             else
                 challenge.challenge_succeeded = false
                 challenge.challenge_status = "You failed. You only took #{damage_taken} damage"
             end
-        when "Archmage"
+        when 'Archmage'
             magic_damage = player['magicDamageDealt']
-            
-            if match_json['info']['participants'].max_by {|p| p['magicDamageDealt']}['puuid'] == challenge.summoner.puuid
+
+            if match_json['info']['participants'].max_by { |p| p['magicDamageDealt'] }['puuid'] ==
+                   challenge.summoner.puuid
                 challenge.challenge_succeeded = true
                 challenge.challenge_status = "You did it! You dealt #{magic_damage} magic damage"
             else
                 challenge.challenge_succeeded = false
                 challenge.challenge_status = "You failed. You dealt #{magic_damage} magic damage"
             end
-        when "MVP"
+        when 'MVP'
             damage = player['totalDamageDealt']
-            
-            if match_json['info']['participants'].max_by {|p| p['totalDamageDealt']}['puuid'] == challenge.summoner.puuid
+
+            if match_json['info']['participants'].max_by { |p| p['totalDamageDealt'] }['puuid'] ==
+                   challenge.summoner.puuid
                 challenge.challenge_succeeded = true
                 challenge.challenge_status = "You did it! You dealt #{damage} total damage"
             else
                 challenge.challenge_succeeded = false
                 challenge.challenge_status = "You failed. You dealt #{damage} total damage"
             end
-        when "Thief"
+        when 'Thief'
             stolen_obj = player['objectivesStolen']
-            
+
             if stolen_obj >= 2
                 challenge.challenge_succeeded = true
                 challenge.challenge_status = "You did it! You stole #{stolen_obj} objectives"
             else
                 challenge.challenge_succeeded = false
-                challenge.challenge_status = "You failed. You stole less than 2 objectives"
+                challenge.challenge_status = 'You failed. You stole less than 2 objectives'
             end
-        when "Farm to Win"
+        when 'Farm to Win'
             minion_kills = player['totalMinionsKilled']
-            
+
             if minion_kills >= 200
                 challenge.challenge_succeeded = true
                 challenge.challenge_status = "You did it! You killed #{minion_kills} minions"
@@ -297,19 +306,19 @@ class CreatedChallengesController < ApplicationController
                 challenge.challenge_succeeded = false
                 challenge.challenge_status = "You failed. You killed #{minion_kills} minions"
             end
-        when "Try Hard"
+        when 'Try Hard'
             turret_kills = player['turretKills']
-            
-            if match_json['info']['participants'].max_by {|p| p['turretKills']}['puuid'] == challenge.summoner.puuid
+
+            if match_json['info']['participants'].max_by { |p| p['turretKills'] }['puuid'] == challenge.summoner.puuid
                 challenge.challenge_succeeded = true
                 challenge.challenge_status = "You did it! You destroyed #{turret_kills} turrets"
             else
                 challenge.challenge_succeeded = false
                 challenge.challenge_status = "You failed. You destroyed #{turret_kills} turrets"
             end
-        when "Serial Killer"
+        when 'Serial Killer'
             killing_sprees = player['killingSprees']
-            
+
             if killing_sprees >= 2
                 challenge.challenge_succeeded = true
                 challenge.challenge_status = "You did it! You had #{killing_sprees} killing sprees"
@@ -317,9 +326,18 @@ class CreatedChallengesController < ApplicationController
                 challenge.challenge_succeeded = false
                 challenge.challenge_status = "You failed. You had #{killing_sprees} killing sprees"
             end
-        when "Huge Pockets"
-            max_gold = timeline_json['info']['frames'].max_by { |f| f["participantFrames"][participant_id.to_s]["currentGold"] }["participantFrames"][participant_id.to_s]["currentGold"]
-            
+        when 'Huge Pockets'
+            max_gold =
+                timeline_json['info']['frames'].max_by do |f|
+                    f['participantFrames'][participant_id.to_s]['currentGold']
+                end[
+                    'participantFrames'
+                ][
+                    participant_id.to_s
+                ][
+                    'currentGold'
+                ]
+
             if max_gold < 3000
                 challenge.challenge_succeeded = true
                 challenge.challenge_status = "You did it! Your max health was #{max_health}"
@@ -327,10 +345,21 @@ class CreatedChallengesController < ApplicationController
                 challenge.challenge_succeeded = false
                 challenge.challenge_status = "You failed. Your max health was #{max_health}"
             end
-        when "Glass Cannon"
-            armor = timeline_json['info']['frames'].max_by { |f| f["participantFrames"][participant_id.to_s]["championStats"]["armor"] }["participantFrames"][participant_id.to_s]["championStats"]["armor"]
-            
-            if armor < 100 
+        when 'Glass Cannon'
+            armor =
+                timeline_json['info']['frames'].max_by do |f|
+                    f['participantFrames'][participant_id.to_s]['championStats']['armor']
+                end[
+                    'participantFrames'
+                ][
+                    participant_id.to_s
+                ][
+                    'championStats'
+                ][
+                    'armor'
+                ]
+
+            if armor < 100
                 challenge.challenge_succeeded = true
                 challenge.challenge_status = "You did it! Your max health was #{max_health}"
             else

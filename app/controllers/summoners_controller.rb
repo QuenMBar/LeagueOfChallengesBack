@@ -14,6 +14,7 @@ class SummonersController < ApplicationController
                         name: new_sum['name'],
                         profile_icon_id: new_sum['profileIconId'],
                         summoner_level: new_sum['summonerLevel'],
+                        score: 100,
                     )
                 render json: s
             else
