@@ -5,10 +5,10 @@ class CreatedChallengesController < ApplicationController
         render json: {}
     end
 
-    def index 
-       summoners = Summoner.all
-       
-       render json: summoners
+    def index
+        summoners = Summoner.order(score: :desc).limit(20).map(&:add_completed)
+
+        render json: summoners
     end
 
     def create
@@ -195,7 +195,7 @@ class CreatedChallengesController < ApplicationController
         when "Don't purchase a consumable"
             cons_used = player['consumablesPurchased']
 
-            if cons_used < 0
+            if cons_used == 0
                 challenge.challenge_succeeded = true
                 challenge.challenge_status = "You did it! You used #{cons_used} consumables"
             else
@@ -205,7 +205,7 @@ class CreatedChallengesController < ApplicationController
         when 'Lee Sin Method Acting'
             wards_placed = player['wardsPlaced']
 
-            if wards_placed < 0
+            if wards_placed == 0
                 challenge.challenge_succeeded = true
                 challenge.challenge_status = "You did it! You placed #{wards_placed} wards"
             else
@@ -215,7 +215,7 @@ class CreatedChallengesController < ApplicationController
         when 'All-Seeing Eye'
             wards_placed = player['wardsPlaced']
 
-            if wards_placed > 25
+            if wards_placed >= 25
                 challenge.challenge_succeeded = true
                 challenge.challenge_status = "You did it! You placed #{wards_placed} wards"
             else
@@ -225,7 +225,7 @@ class CreatedChallengesController < ApplicationController
         when 'Ward Hunter'
             wards_destroyed = player['wardsKilled']
 
-            if wards_destroyed > 10
+            if wards_destroyed >= 10
                 challenge.challenge_succeeded = true
                 challenge.challenge_status = "You did it! You destroyed #{wards_destroyed} wards"
             else
@@ -436,6 +436,13 @@ class CreatedChallengesController < ApplicationController
             challenge.challenge_succeeded = false
             challenge.challenge_status = 'This challenge never existed, congrats on breaking the game'
         end
+
+        if challenge.challenge_succeeded == true
+            challenge.summoner.score += 10
+        else
+            challenge.summoner.score -= 4
+        end
+        challenge.summoner.save
 
         challenge
     end
