@@ -12,7 +12,7 @@ class CreatedChallengeSerializer < ActiveModel::Serializer
                :item_id,
                :summoner_spell,
                :champion_spell,
-               :participants_json,
-               :match_json,
-               :timeline_json
+               :participants_json
+    #    :match_json,
+    #    :timeline_json
 end

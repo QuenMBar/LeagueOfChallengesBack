@@ -1,0 +1,2 @@
+class LeagueQueue < ApplicationRecord
+end

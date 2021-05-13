@@ -22,7 +22,7 @@ class CreatedChallengesController < ApplicationController
                             challenge: chal,
                             attempted: false,
                             game_id: game['gameId'],
-                            map_id: game['mapId'],
+                            map_id: game['gameQueueConfigId'],
                             participants_json: game,
                             platform_id: game['platformId'],
                         )
@@ -53,7 +53,7 @@ class CreatedChallengesController < ApplicationController
         if !s.nil?
             all_chal = s.created_challenges.order(created_at: :desc)
 
-            render json: all_chal, include: %i[summoner challenge]
+            render json: all_chal, include: %i[summoner challenge champion item]
         else
             render status: 400
         end
