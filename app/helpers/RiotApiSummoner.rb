@@ -3,7 +3,7 @@ class RiotApiSummoner
     base_uri 'https://na1.api.riotgames.com'
 
     def initialize
-        @options = { headers: { "X-Riot-Token": 'RGAPI-3db8d3e1-7f72-47ad-9d2d-d9983971d103' } }
+        @options = { headers: { "X-Riot-Token": 'RGAPI-884fae2d-d9f7-4570-b9a1-042d8821cc23' } }
     end
 
     def summoner(name)
