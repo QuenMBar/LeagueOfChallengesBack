@@ -46,8 +46,8 @@ class CreatedChallengesController < ApplicationController
                                 cc.champion_spell = [1, 2, 3, 4].sample
                                 cc.save
                             end
-                            cc_all.push(cc)
                         end
+                    cc_all = s.created_challenges.where(game_id: game['gameId'])
 
                     render json: cc_all, include: %i[summoner challenge]
                 else
