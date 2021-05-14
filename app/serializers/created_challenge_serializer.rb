@@ -12,7 +12,8 @@ class CreatedChallengeSerializer < ActiveModel::Serializer
                :item,
                :summoner_spell,
                :champion_spell,
-               :participants_json
+               :participants_json,
+               :notes
     #    :match_json,
     #    :timeline_json
 end

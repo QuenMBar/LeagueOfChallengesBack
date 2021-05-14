@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_12_234517) do
+ActiveRecord::Schema.define(version: 2021_05_14_055749) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,6 +56,7 @@ ActiveRecord::Schema.define(version: 2021_05_12_234517) do
     t.bigint "item_id"
     t.string "summoner_spell"
     t.string "champion_spell"
+    t.string "notes"
     t.index ["challenge_id"], name: "index_created_challenges_on_challenge_id"
     t.index ["champion_id"], name: "index_created_challenges_on_champion_id"
     t.index ["item_id"], name: "index_created_challenges_on_item_id"

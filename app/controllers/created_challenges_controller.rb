@@ -5,12 +5,6 @@ class CreatedChallengesController < ApplicationController
         render json: {}
     end
 
-    def index
-        summoners = Summoner.order(score: :desc).limit(20).map(&:add_completed)
-
-        render json: summoners
-    end
-
     def create
         s = Summoner.find_by(name: params[:summoner])
         if !s.nil?
@@ -20,6 +14,7 @@ class CreatedChallengesController < ApplicationController
                 chal_exist = s.created_challenges.where(game_id: game['gameId']).exists?
                 if (!chal_exist)
                     # Parse challenge to pick
+                    cc_all = []
                     Challenge
                         .all
                         .sample(3)
@@ -51,9 +46,10 @@ class CreatedChallengesController < ApplicationController
                                 cc.champion_spell = [1, 2, 3, 4].sample
                                 cc.save
                             end
+                            cc_all.push(cc)
                         end
 
-                    render json: cc, include: %i[summoner challenge]
+                    render json: cc_all, include: %i[summoner challenge]
                 else
                     current_chal = s.created_challenges.where(game_id: game['gameId'])
                     render json: current_chal, include: %i[summoner challenge]
@@ -68,17 +64,6 @@ class CreatedChallengesController < ApplicationController
 
     # TODO: Combine these two at somepoint when full crud doesnt matter anymore
     def show
-        s = Summoner.find_by(name: params[:id])
-        if !s.nil?
-            all_chal = s.created_challenges.order(created_at: :desc)
-
-            render json: all_chal, include: %i[summoner challenge champion item]
-        else
-            render status: 400
-        end
-    end
-
-    def update
         s = Summoner.find_by(name: params[:id])
         if !s.nil?
             all_chal = s.created_challenges
@@ -96,7 +81,20 @@ class CreatedChallengesController < ApplicationController
                 end
             end
 
-            render json: inprogress_chal, include: %i[summoner challenge]
+            all_chal = s.created_challenges.order(created_at: :desc)
+
+            render json: all_chal, include: %i[summoner challenge champion item]
+        else
+            render status: 400
+        end
+    end
+
+    def update
+        cc = CreatedChallenge.find(params[:id])
+        if !cc.nil?
+            cc.notes = params[:notes]
+            cc.save
+            render json: cc
         else
             render status: 400
         end

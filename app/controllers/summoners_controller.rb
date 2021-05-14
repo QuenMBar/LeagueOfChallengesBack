@@ -1,4 +1,10 @@
 class SummonersController < ApplicationController
+    def index
+        summoners = Summoner.order(score: :desc).limit(20).map(&:add_completed)
+
+        render json: summoners
+    end
+
     def show
         s = Summoner.where('lower(name) = ?', params[:id].downcase).first
 
