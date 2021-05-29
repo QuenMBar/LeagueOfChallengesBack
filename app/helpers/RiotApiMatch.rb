@@ -3,7 +3,7 @@ class RiotApiMatch
     base_uri 'https://americas.api.riotgames.com'
 
     def initialize
-        @options = { headers: { "X-Riot-Token": 'RGAPI-884fae2d-d9f7-4570-b9a1-042d8821cc23' } }
+        @options = { headers: { "X-Riot-Token": 'RGAPI-db2e1a36-7efc-4366-a069-9602d4ac54f7' } }
     end
 
     def get_match_details(plat_id, game_id)
